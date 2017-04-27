@@ -5,6 +5,9 @@ import io.searchbox.client.JestClientFactory;
 import io.searchbox.client.JestResult;
 import io.searchbox.client.config.HttpClientConfig;
 import io.searchbox.core.*;
+import io.searchbox.indices.Refresh;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.builder.SearchSourceBuilder;
 import ru.terra.sample.eslibs.domain.Twit;
 
 import java.io.IOException;
@@ -47,34 +50,24 @@ public class TwitService {
     }
 
     public void save(List<Twit> twits) throws IOException {
-        twits.forEach(twit -> {
-            try {
-                elastic.execute(new Index.Builder(twit).index(INDEX).type(TYPE).build());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
+        Bulk.Builder bulkSave = new Bulk.Builder();
+        twits.forEach(twit -> bulkSave.addAction(new Index.Builder(twit).index(INDEX).type(TYPE).build()));
+        elastic.execute(bulkSave.build());
+        elastic.execute(new Refresh.Builder().build());
     }
 
     public void deleteAll() throws IOException {
-        findAll().forEach(twit -> {
-            try {
-                elastic.execute(new Delete.Builder(twit.getGuid()).index(INDEX).type(TYPE).build());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
+        Bulk.Builder bulkDelete = new Bulk.Builder();
+        findAll().forEach(twit -> bulkDelete.addAction(new Delete.Builder(twit.getGuid()).index(INDEX).type(TYPE).build()));
+        elastic.execute(bulkDelete.build());
+        elastic.execute(new Refresh.Builder().build());
     }
 
     public List<Twit> findByText(String text) throws IOException {
-        String query = "{\n" +
-                "  \"query\": {\n" +
-                "    \"term\": {\n" +
-                "      \"text\": \"" + text + "\"\n" +
-                "    }\n" +
-                "  }\n" +
-                "}";
-        Search search = new Search.Builder(query)
+        //example with using EL search query
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        searchSourceBuilder.query(QueryBuilders.termQuery("text", text));
+        Search search = new Search.Builder(searchSourceBuilder.toString())
                 // multiple index or types can be added.
                 .addIndex(INDEX)
                 .addType(TYPE)
@@ -85,6 +78,7 @@ public class TwitService {
     }
 
     public List<Twit> findByUserId(String uid) throws IOException {
+        //example with using hand writed query
         String query = "{\n" +
                 "  \"query\": {\n" +
                 "    \"term\": {\n" +

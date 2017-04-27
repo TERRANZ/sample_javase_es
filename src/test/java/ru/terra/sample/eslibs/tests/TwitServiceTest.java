@@ -28,21 +28,10 @@ public class TwitServiceTest {
         t3 = new Twit(UUID.randomUUID().toString(), "t2", "u2");
 
         twitService.save(Arrays.asList(t1, t2, t3));
-
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
     @After
     public void cleanUp() throws IOException {
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         twitService.deleteAll();
     }
 
