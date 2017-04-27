@@ -1,9 +1,9 @@
-package ru.terra.sample.eslibs.tests;
+package by.epam.sample.eslibs.tests;
 
 import org.apache.log4j.BasicConfigurator;
 import org.junit.*;
-import ru.terra.sample.eslibs.domain.Twit;
-import ru.terra.sample.eslibs.service.TwitService;
+import by.epam.sample.eslibs.domain.Twit;
+import by.epam.sample.eslibs.service.TwitService;
 
 import java.io.IOException;
 import java.util.Arrays;

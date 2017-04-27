@@ -1,4 +1,4 @@
-package ru.terra.sample.eslibs.service;
+package by.epam.sample.eslibs.service;
 
 import io.searchbox.client.JestClient;
 import io.searchbox.client.JestClientFactory;
@@ -8,7 +8,7 @@ import io.searchbox.core.*;
 import io.searchbox.indices.Refresh;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
-import ru.terra.sample.eslibs.domain.Twit;
+import by.epam.sample.eslibs.domain.Twit;
 
 import java.io.IOException;
 import java.util.List;

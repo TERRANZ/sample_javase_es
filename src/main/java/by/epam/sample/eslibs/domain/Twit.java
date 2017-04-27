@@ -1,4 +1,4 @@
-package ru.terra.sample.eslibs.domain;
+package by.epam.sample.eslibs.domain;
 
 import io.searchbox.annotations.JestId;
 
